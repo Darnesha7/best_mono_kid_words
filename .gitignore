@@ -1,2 +1,13 @@
 best_mono_kid_words/
 .ipynb_checkpoints/
+.ipynb
+.vscode/*
+*.docx
+*.xlsx
+*.zip
+*.png
+*.tgz
+*.tar.gz
+Untitled.ipynb
+aoa.xlsx
+best_mono_kid_words - Copy/
