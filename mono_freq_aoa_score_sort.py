@@ -1,5 +1,5 @@
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import numpy as np
 
 def rescore(weight_on_freq, aoa, freq):
@@ -7,14 +7,14 @@ def rescore(weight_on_freq, aoa, freq):
     return aoa + x
 
 def flip_values(x):
-    flipped = max(x)-x
+    flipped = x.max() - x
     return flipped
 
 def scale_between(x, minval, maxval):
-    y = x-min(x)
-    z = y.div(max(x))
-    m = z.multiply((max(x))-([min(x)]))
-    scaled = m + min(x)
+    y = x - x.min()
+    z = y.div(x.max())
+    m = z.multiply(x.max() - x.min())
+    scaled = m + x.min()
     return scaled
 
 def log_transform(x):
@@ -26,16 +26,31 @@ def log_transform_legacy(x):
     return log_trans
 
 mono_partial = pd.read_csv('mono_partial.csv')
-weight_on_freq = 0.5
-aoa = mono_partial['aoa']
-freq = mono_partial['freq_lcnl']
-mono_partial['score'] = rescore(weight_on_freq, aoa, freq)
-mono_partial['freq_lcnl_log_flipscale'].corr(mono_partial['score'])
-mono_partial['aoa_mean_scale'].corr(mono_partial['score'])
+sl = pd.read_excel("word-level_data/SUBTLEXusfrequencyabove1.xls")
+ms= mono_partial.merge(sl.loc[:,("Word","SUBTLWF")], left_on = 'word', right_on='Word', how = 'left')
+ms['freq_lcnl_extended'] = ms['freq_lcnl']
+z = ms['freq_lcnl'].isnull()
+ms.loc[z, 'freq_lcnl_extended'] = ms.loc[z, 'SUBTLWF'].divide(ms.loc[z,'SUBTLWF'].max())
+print(ms)
 
-mono_scored = mono_partial[mono_partial.score.notnull()].sort_values(by ='score', ascending = True)
-mono_scored.to_csv('mono_scored.csv', na_rep = '#N/A') 
-sl = pd.read_excel("word-level_data/SUBTLEXusfrequencyabove1.xlsx")
-ms= mono_scored.merge(sl, on = 'word', how = 'left')
-ms_merge['log_value'] = np.log(ms_merge['FREQcount'])
-print(ms_merge)
+ms['freq_lcnl_log'] = log_transform(ms['freq_lcnl'])
+ms['freq_lcnl_extended_log'] = log_transform(ms['freq_lcnl_extended'])
+
+ms['freq_lcnl_log_flipscale'] = scale_between(flip_values(ms['freq_lcnl_log']), 0, 10)
+ms['freq_lcnl_extended_log_flipscale'] = scale_between(flip_values(ms['freq_lcnl_extended_log']),0 , 10)
+
+weight_on_freq = 4.0
+aoa = ms['aoa_mean']
+
+freq = ms['freq_lcnl_log_flipscale']
+ms['score'] = rescore(weight_on_freq, aoa, freq)
+ms['freq_lcnl_log_flipscale'].corr(ms['score'])
+ms['aoa_mean_scale'].corr(ms['score'])
+
+freq_ext = ms['freq_lcnl_extended_log_flipscale']
+ms['score_extended'] = rescore(weight_on_freq, aoa, freq_ext)
+ms['freq_lcnl_extended_log_flipscale'].corr(ms['score_extended'])
+ms['aoa_mean_scale'].corr(ms['score_extended'])
+
+ms = ms[ms.score_extended.notnull()].sort_values(by ='score_extended', ascending = True)
+ms.to_csv('mono_scored_extended.csv', na_rep = '#N/A') 
