@@ -54,3 +54,6 @@ ms['aoa_mean_scale'].corr(ms['score_extended'])
 
 ms = ms[ms.score_extended.notnull()].sort_values(by ='score_extended', ascending = True)
 ms.to_csv('mono_scored_extended.csv', na_rep = '#N/A') 
+mono_score_words = ms.loc[ms['source'] == '3k']
+low_3k_score_words = mono_score_words.head(300)
+low_3k_score_words.to_csv('low_3k_score_words.csv', na_rep = '#N/A')

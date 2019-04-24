@@ -54,5 +54,5 @@ mono_partial500.to_csv('mono_partial500.csv')
 
 mono_partial1000 = pd.DataFrame()
 mono_partial1000 = mono_partial_use.head(1000)
-mono_partial1000.to_csv('mono_partial1000)
+mono_partial1000.to_csv('mono_partial1000.csv')
 
