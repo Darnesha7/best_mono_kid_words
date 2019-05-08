@@ -1,12 +1,12 @@
 import pandas as pd
 
 # Load wordlist with word level statistics
-d = pd.read_csv("data/mono_scored_extended.csv", header = 0, keep_default_na=False)
+d = pd.read_csv("models/extended-score/data/mono_scored_extended.csv", header = 0, keep_default_na=False, na_values="#N/A")
 
 # Load pre-constructed orth and phon representations
-words= pd.read_csv('data/3k/words.csv', header=None, keep_default_na = False).iloc[:,0]
-phon= pd.read_csv('data/3k/phon.csv', header=None)
-orth= pd.read_csv('data/3k/orth.csv', header=None)
+words= pd.read_csv('models/extended-score/data/3k/words.csv', header=None, keep_default_na = False).iloc[:,0]
+phon= pd.read_csv('models/extended-score/data/3k/phon.csv', header=None, keep_default_na = False)
+orth= pd.read_csv('models/extended-score/data/3k/orth.csv', header=None, keep_default_na = False)
 
 phon = phon.set_index(words)
 orth = orth.set_index(words)
@@ -33,7 +33,7 @@ test_orth = orth.loc[test_words,:]
 test_phon = phon.loc[test_words,:]
 
 # Write example files
-train_phon.to_csv('train_orth.csv')
-train_phon.to_csv('train_phon.csv')
-test_orth.to_csv('test_phon.csv')
-test_phon.to_csv('test_orth.csv')
+train_orth.to_csv('models/extended-score/examples/train_orth.csv', na_rep='#N/A', header=False)
+train_phon.to_csv('models/extended-score/examples/train_phon.csv', na_rep='#N/A', header=False)
+test_orth.to_csv('models/extended-score/examples/test_orth.csv', na_rep='#N/A', header=False)
+test_phon.to_csv('models/extended-score/examples/test_phon.csv', na_rep='#N/A', header=False)

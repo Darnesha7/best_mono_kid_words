@@ -25,7 +25,7 @@ def log_transform_legacy(x):
     log_trans = np.log(x)
     return log_trans
 
-mono_partial = pd.read_csv('mono_partial.csv')
+mono_partial = pd.read_csv('mono_partial.csv', header=0, keep_default_na=False, na_values="#N/A")
 sl = pd.read_excel("word-level_data/SUBTLEXusfrequencyabove1.xls")
 ms= mono_partial.merge(sl.loc[:,("Word","SUBTLWF")], left_on = 'word', right_on='Word', how = 'left')
 ms['freq_lcnl_extended'] = ms['freq_lcnl']
