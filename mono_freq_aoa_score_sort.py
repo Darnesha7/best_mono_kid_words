@@ -25,7 +25,7 @@ def log_transform_legacy(x):
     log_trans = np.log(x)
     return log_trans
 
-mono_partial = pd.read_csv('mono_partial.csv', header=0, keep_default_na=False, na_values="#N/A")
+mono_partial = pd.read_csv('mono_partial_use.csv', header=0, keep_default_na=False, na_values="#N/A")
 sl = pd.read_excel("word-level_data/SUBTLEXusfrequencyabove1.xls")
 ms= mono_partial.merge(sl.loc[:,("Word","SUBTLWF")], left_on = 'word', right_on='Word', how = 'left')
 ms['freq_lcnl_extended'] = ms['freq_lcnl']
@@ -55,5 +55,3 @@ ms['aoa_mean_scale'].corr(ms['score_extended'])
 ms = ms[ms.score_extended.notnull()].sort_values(by ='score_extended', ascending = True)
 ms.to_csv('mono_scored_extended.csv', na_rep = '#N/A') 
 mono_score_words = ms.loc[ms['source'] == '3k']
-low_3k_score_words = mono_score_words.head(300)
-low_3k_score_words.to_csv('low_3k_score_words.csv', na_rep = '#N/A')

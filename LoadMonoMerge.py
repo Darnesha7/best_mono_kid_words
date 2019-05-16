@@ -17,10 +17,7 @@ FullData = y.all(axis=1)
 mono_wData = pd.DataFrame()
 mono_wData = mono_tasa.loc[~NoData,:]
 mono_wData.to_csv('words/mono_wData.csv')
-
-mono_3k = pd.read_csv ('words/3k.csv', header = None, names = ["word"])
-mono_3k = mono_3k.merge(aoa, on = 'word', how = 'inner')
-mono_3k.shape 
+ 
 
 mono_partial = pd.DataFrame()
 mono_partial = mono_wData[mono_wData.aoa_mean.notnull()]

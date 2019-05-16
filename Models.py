@@ -9,7 +9,6 @@ phon_train = pd.read_csv("3k/phon_aoa300_reps_train.csv", header=None, keep_defa
 phon_test = pd.read_csv("3k/phon_aoa300_reps_test.csv", header=None, keep_default_na=False, index_col = 0)
 orth = pd.read_csv ("3k/orth.csv", header=None)
 phon = pd.read_csv ("3k/phon.csv", header=None)
-low_3k_score_words = pd.read_csv ("low_3k_score_words.csv", header=None, keep_default_na=False, index_col = 0)
 
 M = MLPClassifier(
     hidden_layer_sizes = (100,), 
